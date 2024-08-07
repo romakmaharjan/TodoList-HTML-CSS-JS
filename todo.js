@@ -29,13 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
       todoList.appendChild(li);
       input.value = ""; // Clear the input
 
-      // Add delete event listener to the new trash icon
+      // Add event listeners to the new icons
+      const checkBtn = li.querySelector(".fa-square-check");
       const deleteBtn = li.querySelector(".fa-trash");
+
+      checkBtn.addEventListener("click", toggleTodoItem);
       deleteBtn.addEventListener("click", deleteTodoItem);
 
       // Save to localStorage
       saveTodos();
     }
+  }
+
+  function toggleTodoItem(event) {
+    const item = event.target.closest("li");
+    item.classList.toggle("checked");
+    // Save to localStorage
+    saveTodos();
   }
 
   function deleteTodoItem(event) {
@@ -48,7 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveTodos() {
     const todos = [];
     todoList.querySelectorAll("li").forEach((li) => {
-      todos.push(li.querySelector("span").textContent);
+      todos.push({
+        text: li.querySelector("span").textContent,
+        completed: li.classList.contains("checked"),
+      });
     });
     localStorage.setItem("todos", JSON.stringify(todos));
   }
@@ -58,16 +71,22 @@ document.addEventListener("DOMContentLoaded", () => {
     savedTodos.forEach((todo) => {
       const li = document.createElement("li");
       li.innerHTML = `
-        <span>${todo}</span>
+        <span>${todo.text}</span>
         <label>
           <i class="fa-solid fa-square-check"></i>&nbsp;
           <i class="fa-solid fa-trash"></i>
         </label>
       `;
+      if (todo.completed) {
+        li.classList.add("checked");
+      }
       todoList.appendChild(li);
 
-      // Add delete event listener to the new trash icon
+      // Add event listeners to the new icons
+      const checkBtn = li.querySelector(".fa-square-check");
       const deleteBtn = li.querySelector(".fa-trash");
+
+      checkBtn.addEventListener("click", toggleTodoItem);
       deleteBtn.addEventListener("click", deleteTodoItem);
     });
   }

@@ -99,3 +99,10 @@ body {
   font-size: #fff;
   cursor: pointer;
 }
+.middle-page ul .checked span {
+  color: lightgray;
+  text-decoration: line-through;
+}
+.middle-page ul .checked .fa-square-check {
+  color: lightgray;
+}
